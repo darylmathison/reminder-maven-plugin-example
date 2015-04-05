@@ -7,42 +7,62 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Mojo(name = "remind",
         defaultPhase = LifecyclePhase.PREPARE_PACKAGE,
-        requiresOnline = true, requiresProject = true,
+        requiresOnline = false, requiresProject = true,
         threadSafe = false)
 public class ReminderMojo extends AbstractMojo {
 
-    @Parameter(property = "timestampLocation", defaultValue = "${project.basedir}", required = true)
-    protected File timestampFileLocation;
+    @Parameter(property = "basedir", required = true)
+    protected File basedir;
+
+    @Parameter(property = "message", required = true)
+    protected String message;
+
+    @Parameter(property = "numOfWeeks", defaultValue = "6", required = true)
+    protected int numOfWeeks;
 
     public void execute() throws MojoExecutionException {
-        File f = timestampFileLocation;
 
-        if (!f.exists()) {
-            f.mkdirs();
+        File timestampFile = new File(basedir, "timestamp.txt");
+        if(!timestampFile.exists()) {
+            basedir.mkdirs();
+            getLog().info(message);
+            timestamp(timestampFile);
+        } else {
+            LocalDateTime date = readTimestamp(timestampFile);
+            date.plus(numOfWeeks, ChronoUnit.WEEKS);
+            if(date.isBefore(LocalDateTime.now())) {
+                getLog().info(message);
+                timestamp(timestampFile);
+            }
         }
+    }
 
-        File file = new File(f, "remind.txt");
-
-        FileWriter w = null;
-        try {
-            w = new FileWriter(file);
-
-            w.write(String.valueOf(System.currentTimeMillis()));
+    private void timestamp(File file) throws MojoExecutionException {
+        try(FileWriter w = new FileWriter(file)) {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            w.write(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         } catch (IOException e) {
             throw new MojoExecutionException("Error creating file " + file, e);
-        } finally {
-            if (w != null) {
-                try {
-                    w.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
+        }
+    }
+
+    private LocalDateTime readTimestamp(File file) throws MojoExecutionException {
+        try(FileReader r = new FileReader(file)) {
+            char[] buffer = new char[1024];
+            int len = r.read(buffer);
+            LocalDateTime date = LocalDateTime.parse(String.valueOf(buffer, 0, len));
+            return date;
+        } catch(IOException ioe) {
+            throw new MojoExecutionException("Error reading file " + file, ioe);
         }
     }
 }
