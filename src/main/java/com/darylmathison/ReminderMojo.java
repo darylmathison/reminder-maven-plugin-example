@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @Mojo(name = "remind",
-        defaultPhase = LifecyclePhase.PREPARE_PACKAGE,
+        defaultPhase = LifecyclePhase.PACKAGE,
         requiresOnline = false, requiresProject = true,
         threadSafe = false)
 public class ReminderMojo extends AbstractMojo {
@@ -32,6 +32,7 @@ public class ReminderMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
 
         File timestampFile = new File(basedir, "timestamp.txt");
+        getLog().debug("basedir is " + basedir.getName());
         if(!timestampFile.exists()) {
             basedir.mkdirs();
             getLog().info(message);
