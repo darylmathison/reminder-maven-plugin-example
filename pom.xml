@@ -15,6 +15,18 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <scm>
+        <url>https://github.com/darylmathison/reminder-maven-plugin-example</url>
+        <connection>scm:git:https://github.com/darylmathison/reminder-maven-plugin-example.git</connection>
+    </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/darylmathison/reminder-maven-plugin-example/issues</url>
+    </issueManagement>
+    
+    <description>
+        This project is an example of how to create a Maven plugin using annotations.
+    </description>
     <dependencies>
         <!-- Maven dependencies -->
         <dependency>
@@ -78,10 +90,40 @@
                     <configuration>
                         <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                     </configuration>
-                </plugin>
+                </plugin>    
             </plugins>
         </pluginManagement>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>index</report>
+                            <report>project-team</report>
+                            <report>issue-tracking</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+    <developers>
+        <developer>
+            <id>darylmathison</id>
+            <name>Daryl Mathison</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <email>daryl.mathison@gmail.com</email>
+        </developer>
+    </developers>
     <profiles>
         <profile>
             <id>run-its</id>
