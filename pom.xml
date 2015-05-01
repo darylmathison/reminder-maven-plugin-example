@@ -18,7 +18,9 @@
     <scm>
         <url>https://github.com/darylmathison/reminder-maven-plugin-example</url>
         <connection>scm:git:https://github.com/darylmathison/reminder-maven-plugin-example.git</connection>
+        <developerConnection>scm:git:https://github.com/darylmathison/reminder-maven-plugin-example.git</developerConnection>
     </scm>
+
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/darylmathison/reminder-maven-plugin-example/issues</url>
@@ -27,6 +29,17 @@
     <description>
         This project is an example of how to create a Maven plugin using annotations.
     </description>
+
+    <developers>
+        <developer>
+            <id>darylmathison</id>
+            <name>Daryl Mathison</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
     <dependencies>
         <!-- Maven dependencies -->
         <dependency>
@@ -112,18 +125,52 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.18.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                            <report>test-javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <linkJavadoc>true</linkJavadoc>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>jxr</report>
+                            <report>test-jxr</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <type>range</type>
+                    <range>90</range>
+                </configuration>
+            </plugin>
         </plugins>
     </reporting>
-    <developers>
-        <developer>
-            <id>darylmathison</id>
-            <name>Daryl Mathison</name>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <email>daryl.mathison@gmail.com</email>
-        </developer>
-    </developers>
+
     <profiles>
         <profile>
             <id>run-its</id>
