@@ -39,7 +39,7 @@ public class ReminderMojo extends AbstractMojo {
             timestamp(timestampFile);
         } else {
             LocalDateTime date = readTimestamp(timestampFile);
-            date.plus(numOfWeeks, ChronoUnit.WEEKS);
+            date = date.plus(numOfWeeks, ChronoUnit.WEEKS);
             if(date.isBefore(LocalDateTime.now())) {
                 getLog().info(message);
                 timestamp(timestampFile);
