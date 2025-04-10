@@ -14,6 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>22</maven.compiler.source>
     <maven.compiler.target>22</maven.compiler.target>
+    <google-java-format.version>1.26.0</google-java-format.version>
   </properties>
 
   <scm>
@@ -68,16 +69,22 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.17</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
       <version>3.3.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- Non maven dependencies -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
+      <groupId>com.google.googlejavaformat</groupId>
+      <artifactId>google-java-format</artifactId>
+      <version>${google-java-format.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -105,6 +112,20 @@
           </executions>
           <configuration>
             <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.1.2</version>
+          <configuration>
+            <argLine>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+            </argLine>
           </configuration>
         </plugin>
       </plugins>

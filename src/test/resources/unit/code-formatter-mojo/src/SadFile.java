@@ -1,0 +1,1 @@
+public class SadFile { public String makeMeSad() {return "The answer to life is not 42.";}}

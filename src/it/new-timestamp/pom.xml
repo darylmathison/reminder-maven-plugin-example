@@ -23,7 +23,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <message>Wash the doggies</message>
+                    <basedir>${project.basedir}</basedir>
                 </configuration>
             </plugin>
         </plugins>
