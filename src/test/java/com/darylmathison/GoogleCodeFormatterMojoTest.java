@@ -44,11 +44,23 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
     assertTrue(testFiles(baseTestDirectory + "/src"));
   }
 
-  public void testForEmptyDirectory() {
+  public void testForEmptyDirectory() throws Exception {
     File pom = getTestFile(baseTestDirectory + "/pom-empty-directory.xml");
     assertNotNull(pom);
     assertTrue(pom.exists());
+    GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
+    assertNotNull(myMojo);
+    myMojo.execute();
+  }
 
+    public void testFormatEmptyFiles() throws Exception {
+    File pom = getTestFile(baseTestDirectory + "/pom.xml");
+    assertNotNull(pom);
+    assertTrue(pom.exists());
+    GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
+    assertNotNull(myMojo);
+    myMojo.execute();
+    assertTrue(testFiles(baseTestDirectory + "/src"));
   }
 
   private boolean testFiles(String path) throws IOException, FormatterException {
