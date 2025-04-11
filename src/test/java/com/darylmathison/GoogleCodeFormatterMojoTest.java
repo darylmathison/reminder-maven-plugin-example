@@ -1,30 +1,76 @@
 package com.darylmathison;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
-/**
- * Created by Daryl on 3/31/2015.
- */
+
 public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+  private String baseTestDirectory = "src/test/resources/unit/code-formatter-mojo";
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+  }
 
-    public void testJustFormat() throws Exception {
-        File pom = getTestFile("src/test/resources/unit/code-formatter-mojo/pom.xml");
-        assertNotNull(pom);
-        assertTrue(pom.exists());
-        GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
-        assertNotNull(myMojo);
-        myMojo.execute();
+  @Override
+  protected void tearDown() throws Exception {
+    cleanupPath(baseTestDirectory);
+    super.tearDown();
+  }
+
+  public void testFormat() throws Exception {
+    File pom = getTestFile(baseTestDirectory + "/pom.xml");
+    assertNotNull(pom);
+    assertTrue(pom.exists());
+    GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
+    assertNotNull(myMojo);
+    myMojo.execute();
+    assertTrue(testFiles(baseTestDirectory + "/src"));
+  }
+
+  public void testForEmptyDirectory() {
+    File pom = getTestFile(baseTestDirectory + "/pom-empty-directory.xml");
+    assertNotNull(pom);
+    assertTrue(pom.exists());
+
+  }
+
+  private boolean testFiles(String path) throws IOException, FormatterException {
+    File basedir = new File(path);
+    if (basedir.isDirectory()) {
+      for (File file : basedir.listFiles()) {
+        String fileContent = readFile(file);
+        if (fileContent.isEmpty()) {
+          return false;
+        }
+        String formattedSource = new Formatter().formatSource(fileContent);
+        return fileContent.equals(formattedSource);
+      }
     }
+    return false;
+  }
+
+  private String readFile(File file) throws IOException {
+    StringBuilder content = new StringBuilder();
+    try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+      reader.lines().forEach(line -> content.append(line).append(System.lineSeparator()));
+      return content.toString();
+    }
+  }
+
+  private void cleanupPath(String path) throws IOException, GitAPIException {
+    File basedir = new File(getBasedir());
+    try(Git git = Git.open(basedir);) {
+      git.checkout().addPath(path).call();
+    }
+  }
 }
