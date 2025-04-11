@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.darylmathison.it</groupId>
-    <artifactId>new-timestamp</artifactId>
+    <artifactId>improve-formatting-test</artifactId>
     <version>0.0.1.BUILD-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,13 +18,10 @@
                     <execution>
                         <id>blah</id>
                         <goals>
-                            <goal>remind</goal>
+                            <goal>format</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <basedir>${project.basedir}</basedir>
-                </configuration>
             </plugin>
         </plugins>
     </build>

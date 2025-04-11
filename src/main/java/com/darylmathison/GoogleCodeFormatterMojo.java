@@ -20,7 +20,7 @@ import org.apache.maven.plugins.annotations.Parameter;
     threadSafe = false)
 public class GoogleCodeFormatterMojo extends AbstractMojo {
 
-  @Parameter(property = "srcBaseDir", defaultValue = "${project.basedir}/src/java")
+  @Parameter(property = "srcBaseDir", defaultValue = "${project.build.sourceDirectory}")
   protected File srcBaseDir;
 
   public void execute() throws MojoExecutionException {
@@ -39,32 +39,48 @@ public class GoogleCodeFormatterMojo extends AbstractMojo {
     }
 
     for (File file : files) {
-      if (!file.isFile() || !file.getName().endsWith(".java")) {
-        // Skip non-Java files or directories
-        getLog().info("Skipping non-Java file or directory: " + file.getName());
-        continue;
+      if (file.isDirectory()) {
+        processDirectory(file);
+      } else if (file.isFile() && file.getName().endsWith(".java")) {
+        processFile(file);
       }
+    }
+  }
 
-      try {
+
+
+  private void processDirectory(File directory) {
+    File[] files = directory.listFiles();
+    if (files == null) {
+      return;
+    }
+    for (File file : files) {
+      if (file.isDirectory()) {
+        processDirectory(file);
+      } else if (file.isFile() && file.getName().endsWith(".java")) {
+        processFile(file);
+      }
+    }
+  }
+
+  private void processFile(File file) {
+    try {
         String fileContent = readFile(file);
-        if (fileContent.isEmpty()) {
+        if (!fileContent.isEmpty()) {
+          String formattedSource = new Formatter().formatSource(fileContent);
+
+          getLog().info("Formatted file: " + file.getName());
+          getLog().info(formattedSource);
+
+          writeFile(file, formattedSource);
+        } else {
           getLog().info("Skipping empty file: " + file.getName());
-          continue;
         }
-
-        String formattedSource = new Formatter().formatSource(fileContent);
-
-        getLog().info("Formatted file: " + file.getName());
-        getLog().info(formattedSource);
-
-        writeFile(file, formattedSource);
-
       } catch (IOException e) {
         getLog().error("I/O error processing file: " + file.getName(), e);
       } catch (FormatterException formatterException) {
         getLog().error("Error formatting file: " + file.getName(), formatterException);
       }
-    }
   }
 
   private String readFile(File file) throws IOException {
