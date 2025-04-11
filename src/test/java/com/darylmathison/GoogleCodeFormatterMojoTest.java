@@ -27,6 +27,13 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
     super.tearDown();
   }
 
+  private void cleanupPath(String path) throws IOException, GitAPIException {
+    File basedir = new File(getBasedir());
+    try(Git git = Git.open(basedir);) {
+      git.checkout().addPath(path).call();
+    }
+  }
+
   public void testFormat() throws Exception {
     File pom = getTestFile(baseTestDirectory + "/pom.xml");
     assertNotNull(pom);
@@ -64,13 +71,6 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
     try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
       reader.lines().forEach(line -> content.append(line).append(System.lineSeparator()));
       return content.toString();
-    }
-  }
-
-  private void cleanupPath(String path) throws IOException, GitAPIException {
-    File basedir = new File(getBasedir());
-    try(Git git = Git.open(basedir);) {
-      git.checkout().addPath(path).call();
     }
   }
 }
