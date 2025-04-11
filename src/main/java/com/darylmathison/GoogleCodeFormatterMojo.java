@@ -2,14 +2,17 @@ package com.darylmathison;
 
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 @Mojo(name = "format",
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
@@ -66,19 +69,14 @@ public class GoogleCodeFormatterMojo extends AbstractMojo {
 
   private String readFile(File file) throws IOException {
     StringBuilder content = new StringBuilder();
-    try (BufferedReader reader = new BufferedReader(
-        new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        content.append(line).append(System.lineSeparator());
-      }
+    try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+      reader.lines().forEach(line -> content.append(line).append(System.lineSeparator()));
+      return content.toString();
     }
-    return content.toString();
   }
 
   private void writeFile(File file, String content) throws IOException {
-    try (BufferedWriter writer = new BufferedWriter(
-        new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+    try (FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
       writer.write(content);
     }
   }
