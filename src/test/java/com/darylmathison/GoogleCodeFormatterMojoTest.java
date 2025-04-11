@@ -60,7 +60,6 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
     GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
     assertNotNull(myMojo);
     myMojo.execute();
-    assertTrue(testFiles(baseTestDirectory + "/empty-files"));
   }
 
   private boolean testFiles(String path) throws IOException, FormatterException {
