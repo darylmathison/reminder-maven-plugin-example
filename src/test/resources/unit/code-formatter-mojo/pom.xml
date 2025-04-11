@@ -33,7 +33,7 @@
         <artifactId>code-formatter-maven-plugin</artifactId>
         <version>1.0-SNAPSHOT</version>
         <configuration>
-          <basedir>target/test-classes/unit/code-formatter-mojo/src</basedir>
+          <basedir>src/test/resources/unit/code-formatter-mojo/src</basedir>
         </configuration>
       </plugin>
     </plugins>
