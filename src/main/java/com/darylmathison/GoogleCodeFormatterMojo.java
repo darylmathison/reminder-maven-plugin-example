@@ -15,26 +15,26 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "format",
-    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    defaultPhase = LifecyclePhase.PROCESS_SOURCES,
     requiresOnline = false, requiresProject = true,
     threadSafe = false)
 public class GoogleCodeFormatterMojo extends AbstractMojo {
 
-  @Parameter(property = "basedir", required = true)
-  protected File basedir;
+  @Parameter(property = "srcBaseDir", defaultValue = "${project.basedir}/src/java")
+  protected File srcBaseDir;
 
   public void execute() throws MojoExecutionException {
-    getLog().info("basedir is " + basedir.getAbsolutePath());
+    getLog().info("basedir is " + srcBaseDir.getAbsolutePath());
 
     // Ensure the base directory is valid
-    if (!basedir.isDirectory()) {
-      getLog().error("Invalid base directory: " + basedir.getAbsolutePath());
+    if (!srcBaseDir.isDirectory()) {
+      getLog().error("Invalid base directory: " + srcBaseDir.getAbsolutePath());
       return;
     }
 
-    File[] files = basedir.listFiles();
+    File[] files = srcBaseDir.listFiles();
     if (files == null || files.length == 0) {
-      getLog().info("No files to process in directory: " + basedir.getAbsolutePath());
+      getLog().info("No files to process in directory: " + srcBaseDir.getAbsolutePath());
       return;
     }
 
