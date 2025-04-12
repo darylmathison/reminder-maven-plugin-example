@@ -90,7 +90,6 @@
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
       <version>7.2.0.202503040940-r</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -222,7 +221,9 @@
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <settingsFile>src/it/settings.xml</settingsFile>
               <goals>
-                <goal>process-sources</goal>
+                <goal>clean</goal>
+                <goal>compile</goal>
+                <goal>package</goal>
               </goals>
             </configuration>
             <executions>
