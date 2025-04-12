@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import javax.inject.Inject;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -23,13 +22,6 @@ public class GoogleCodeFormatterMojo extends AbstractMojo {
 
   @Parameter(property = "srcBaseDir", defaultValue = "${project.build.sourceDirectory}")
   protected File srcBaseDir;
-
-  private final Formatter formatter;
-
-  @Inject
-  public GoogleCodeFormatterMojo(Formatter formatter) {
-    this.formatter = formatter;
-  }
 
   public void execute() throws MojoExecutionException {
     getLog().info("basedir is " + srcBaseDir.getAbsolutePath());
@@ -75,7 +67,7 @@ public class GoogleCodeFormatterMojo extends AbstractMojo {
     try {
         String fileContent = readFile(file);
         if (!fileContent.isEmpty()) {
-          String formattedSource = formatter.formatSource(fileContent);
+          String formattedSource = new Formatter().formatSource(fileContent);
 
           getLog().info("Formatted file: " + file.getName());
           getLog().info(formattedSource);
