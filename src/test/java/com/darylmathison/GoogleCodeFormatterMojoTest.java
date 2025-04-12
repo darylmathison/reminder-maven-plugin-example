@@ -14,7 +14,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 
 public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
 
-  private final String baseTestDirectory = "src/test/resources/unit/code-formatter-mojo";
+  private String baseTestDirectory = "src/test/resources/unit/code-formatter-mojo";
 
   @Override
   protected void setUp() throws Exception {
@@ -29,7 +29,7 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
 
   private void cleanupPath(String path) throws IOException, GitAPIException {
     File basedir = new File(getBasedir());
-    try(Git git = Git.open(basedir)) {
+    try(Git git = Git.open(basedir);) {
       git.checkout().addPath(path).call();
     }
   }
@@ -54,13 +54,13 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
   }
 
     public void testFormatEmptyFiles() throws Exception {
-    File pom = getTestFile(baseTestDirectory + "/pom-empty-file.xml");
+    File pom = getTestFile(baseTestDirectory + "/pom.xml");
     assertNotNull(pom);
     assertTrue(pom.exists());
     GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
     assertNotNull(myMojo);
     myMojo.execute();
-    assertTrue(testFiles(baseTestDirectory + "/empty-files"));
+    assertTrue(testFiles(baseTestDirectory + "/src"));
   }
 
   private boolean testFiles(String path) throws IOException, FormatterException {
