@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-java@v4.7.0
       with:
         distribution: 'adopt'
-        java-version: '11'
+        java-version: '22'
         server-id: github
         settings-path: ${{ github.workspace }}
     - name: Cache maven packages
