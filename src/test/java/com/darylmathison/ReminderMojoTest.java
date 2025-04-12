@@ -7,7 +7,7 @@ import java.io.File;
 /**
  * Created by Daryl on 3/31/2015.
  */
-public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
+public class ReminderMojoTest extends AbstractMojoTestCase {
 
     @Override
     protected void setUp() throws Exception {
@@ -19,11 +19,11 @@ public class GoogleCodeFormatterMojoTest extends AbstractMojoTestCase {
         super.tearDown();
     }
 
-    public void testJustFormat() throws Exception {
-        File pom = getTestFile("src/test/resources/unit/code-formatter-mojo/pom.xml");
+    public void testJustMessage() throws Exception {
+        File pom = getTestFile("src/test/resources/unit/reminder-mojo/pom.xml");
         assertNotNull(pom);
         assertTrue(pom.exists());
-        GoogleCodeFormatterMojo myMojo = (GoogleCodeFormatterMojo) lookupMojo("format", pom);
+        ReminderMojo myMojo = (ReminderMojo) lookupMojo("remind", pom);
         assertNotNull(myMojo);
         myMojo.execute();
     }
