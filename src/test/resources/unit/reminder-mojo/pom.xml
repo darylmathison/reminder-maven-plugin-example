@@ -19,7 +19,7 @@
         <plugins>
             <plugin>
                 <groupId>com.darylmathison</groupId>
-                <artifactId>code-formatter-maven-plugin</artifactId>
+                <artifactId>reminder-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
                     <basedir>target/test-classes/unit/reminder-mojo</basedir>
