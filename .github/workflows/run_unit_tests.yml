@@ -25,7 +25,7 @@ jobs:
         server-id: github
         settings-path: ${{ github.workspace }}
     - name: Cache maven packages
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.m2
         key: maven-${{ hashFiles('**/pom.xml') }}
